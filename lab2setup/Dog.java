@@ -4,7 +4,6 @@ public class Dog {
     public Dog(int s) {
         size = s;
     }
-
     /** Makes a noise. */
     public String noise() {
         if (size < 10) {
