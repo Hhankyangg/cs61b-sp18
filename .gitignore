@@ -5,6 +5,7 @@
 !**.json
 !.expelimicate
 !.gitignore
+!My-Notes/*
 .class
 *.log
 *.ctxt
