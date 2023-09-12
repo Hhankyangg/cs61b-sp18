@@ -1,25 +1,25 @@
-public class LinkedListDeque<Genshin> {
+public class LinkedListDeque<T> {
     private class TriNode {
-        public TriNode prev;
-        public Genshin item;
-        public TriNode next;
+        private TriNode prev;
+        private T item;
+        private TriNode next;
 
-        public TriNode(TriNode p, Genshin x, TriNode n) {
+        private TriNode(TriNode p, T x, TriNode n) {
             prev = p;
             item = x;
             next = n;
         }
 
-        public Genshin getHelper(int index) {
+        private T getHelper(int index) {
             if (index == 0) {
                 return item;
             }
-            return this.next.getHelper(index-1);
+            return this.next.getHelper(index - 1);
         }
     }
 
-    public TriNode sentinel;
-    public int size;
+    private TriNode sentinel;
+    private int size;
 
     /** Creates an empty linked list deque */
     public LinkedListDeque() {
@@ -30,30 +30,30 @@ public class LinkedListDeque<Genshin> {
     }
 
     /** Creates a linked list with only one element: item */
-    public LinkedListDeque(Genshin item) {
+    public LinkedListDeque(T item) {
         sentinel = new TriNode(null, null, null);
         sentinel.next = new TriNode(sentinel, item, sentinel);
         sentinel.prev = sentinel.next;
         size = 1;
     }
 
-    /** Adds an item of type Genshin to the front of the deque. */
-    public void addFirst(Genshin item) {
-        TriNode new_item = new TriNode(null, item, null);
-        sentinel.next.prev = new_item;
-        new_item.next = sentinel.next;
-        sentinel.next = new_item;
-        new_item.prev = sentinel;
+    /** Adds an item of type T to the front of the deque. */
+    public void addFirst(T item) {
+        TriNode newItem = new TriNode(null, item, null);
+        sentinel.next.prev = newItem;
+        newItem.next = sentinel.next;
+        sentinel.next = newItem;
+        newItem.prev = sentinel;
         size += 1;
     }
 
-    /** Adds an item of type Genshin to the back of the deque. */
-    public void addLast(Genshin item) {
-        TriNode new_item = new TriNode(null, item, null);
-        sentinel.prev.next = new_item;
-        new_item.prev = sentinel.prev;
-        sentinel.prev = new_item;
-        new_item.next = sentinel;
+    /** Adds an item of type T to the back of the deque. */
+    public void addLast(T item) {
+        TriNode newItem = new TriNode(null, item, null);
+        sentinel.prev.next = newItem;
+        newItem.prev = sentinel.prev;
+        sentinel.prev = newItem;
+        newItem.next = sentinel;
         size += 1;
     }
 
@@ -84,31 +84,31 @@ public class LinkedListDeque<Genshin> {
     }
 
     /** Removes and returns the item at the front of the deque. If no such item exists, returns null. */
-    public Genshin removeFirst() {
-        TriNode first_ptr = sentinel.next;
-        if (first_ptr == sentinel) {
+    public T removeFirst() {
+        TriNode firstPtr = sentinel.next;
+        if (firstPtr == sentinel) {
             return null;
         }
-        first_ptr.next.prev = sentinel;
-        sentinel.next = first_ptr.next;
+        firstPtr.next.prev = sentinel;
+        sentinel.next = firstPtr.next;
         size -= 1;
-        return first_ptr.item;
+        return firstPtr.item;
     }
 
     /** Removes and returns the item at the back of the deque. If no such item exists, returns null. */
-    public Genshin removeLast() {
-        TriNode last_ptr = sentinel.prev;
-        if (last_ptr == sentinel) {
+    public T removeLast() {
+        TriNode lastPtr = sentinel.prev;
+        if (lastPtr == sentinel) {
             return null;
         }
-        last_ptr.prev.next = sentinel;
-        sentinel.prev = last_ptr.prev;
+        lastPtr.prev.next = sentinel;
+        sentinel.prev = lastPtr.prev;
         size -= 1;
-        return last_ptr.item;
+        return lastPtr.item;
     }
 
     /** Gets the item at the given index. */
-    public Genshin get(int index) {
+    public T get(int index) {
         TriNode ptr = sentinel.next;
         if (index >= this.size() || index < 0) {
             return null;
@@ -121,11 +121,10 @@ public class LinkedListDeque<Genshin> {
     }
 
     /** Same as get, but uses recursion. */
-    public Genshin getRecursive(int index) {
+    public T getRecursive(int index) {
         if (index >= this.size() || index < 0) {
             return null;
         }
         return this.sentinel.next.getHelper(index);
     }
-
 }
