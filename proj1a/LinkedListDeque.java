@@ -29,14 +29,6 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-    /** Creates a linked list with only one element: item */
-    public LinkedListDeque(T item) {
-        sentinel = new TriNode(null, null, null);
-        sentinel.next = new TriNode(sentinel, item, sentinel);
-        sentinel.prev = sentinel.next;
-        size = 1;
-    }
-
     /** Adds an item of type T to the front of the deque. */
     public void addFirst(T item) {
         TriNode newItem = new TriNode(null, item, null);
@@ -83,7 +75,8 @@ public class LinkedListDeque<T> {
         System.out.println(ptr.item);
     }
 
-    /** Removes and returns the item at the front of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the front of the deque.
+     * If no such item exists, returns null. */
     public T removeFirst() {
         TriNode firstPtr = sentinel.next;
         if (firstPtr == sentinel) {
@@ -95,7 +88,8 @@ public class LinkedListDeque<T> {
         return firstPtr.item;
     }
 
-    /** Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the back of the deque.
+     * If no such item exists, returns null. */
     public T removeLast() {
         TriNode lastPtr = sentinel.prev;
         if (lastPtr == sentinel) {

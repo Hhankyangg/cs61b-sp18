@@ -156,7 +156,7 @@ public class ArrayDeque<T> {
 
     public T get(int index) {
         if (index < size) {
-            if (nextFirst < nextLast) {
+            if (nextFirst <= nextLast) {
                 int numLeft = nextFirst;
                 if (index < numLeft) {
                     return items[numLeft - 1 - index];
@@ -169,4 +169,5 @@ public class ArrayDeque<T> {
         }
         return null;
     }
+
 }
