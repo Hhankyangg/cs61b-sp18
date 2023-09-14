@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -29,7 +29,7 @@ public class IntList {
      * A List with null rest, and first = 0.
      */
     public IntList() {
-    /* NOTE: public IntList () { }  would also work. */
+        /* NOTE: public IntList () { }  would also work. */
         this(0, null);
     }
 
@@ -133,15 +133,17 @@ public class IntList {
         return curr;
     }
 
-//    public static IntList reverse(IntList A) {
-//        if (A == null || A.rest == null) {
-//            return A;
-//        }
-//        IntList reversed = reverse(A.rest);
-//        A.rest.rest = A;
-//        A.rest = null;
-//        return reversed;
-//    }
+    /*
+    public static IntList reverse(IntList A) {
+        if (A == null || A.rest == null) {
+            return A;
+        }
+        IntList reversed = reverse(A.rest);
+        A.rest.rest = A;
+        A.rest = null;
+        return reversed;
+    }
+    */
 
 
 
