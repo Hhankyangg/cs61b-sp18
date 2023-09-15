@@ -23,11 +23,14 @@ public class TestPalindrome {
         assertFalse(palindrome.isPalindrome("cat"));
         assertTrue(palindrome.isPalindrome("racecar"));
         assertTrue(palindrome.isPalindrome("raceecar"));
+        assertTrue(palindrome.isPalindrome("A"));
+        assertFalse(palindrome.isPalindrome("abbA"));
     }
 
     @Test
     public void testIsPalindromeOffByOne() {
         OffByOne obo = new OffByOne();
+        assertFalse(palindrome.isPalindrome("String", obo));
         assertTrue(palindrome.isPalindrome("", obo));
         assertTrue(palindrome.isPalindrome("a", obo));
         assertFalse(palindrome.isPalindrome("cat", obo));
