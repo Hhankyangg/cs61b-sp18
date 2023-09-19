@@ -8,6 +8,7 @@
 
 When writing JUnit tests, it is good practice to write ‘@Test’ above the functionthat is testing. This allows for all your test methods to be run non statically.
 
+
 ```java
 import org.junit.Test;
 import static org.junit.Assert.*;
