@@ -98,3 +98,21 @@ Many authors write $R(N) = \Theta(f(N))$ instead of $R(N) \in \Theta (f(N))$. Yo
 When using ΘΘ to capture a function’s asymptotic scaling, we avoid unnecessary terms in our ΘΘ expression. For example, while $4N^2 + 3N + 6 \in \Theta (4N^2 + 3N)$, we will usually make the simpler claim that is $4N^2 + 3N + 6 \in \Theta (N^2)$.
 
 Big Theta is exactly equivalent to order of growth. That is, if a function $R(N)$ has order of growth $N^2$, then we also have that $R(N) \in \Theta (f(N))$.
+
+## 8.3
+
+**Runtime Analysis.** Understanding the runtime of code involves deep thought. It amounts to asking: “How long does it take to do stuff?”, where stuff can be any conceivable computational process whatsoever. It simply cannot be done mechanically, at least for non-trivial problems. As an example, a pair of nested for loops does NOT mean $\Theta (N^2)$ runtime as we saw in lecture.
+
+**Cost Model.** As an anchor for your thinking, recall the idea of a “cost model” from last lecture. Pick an operation and count them. You want the one whose count has the highest order of growth as a function of the input size.
+
+**Important Sums.** This is not a math class so we’ll be a bit sloppy, but the two key sums that should know are that:
+
+- $$
+  1+2+3+ \dots +N \in \Theta (N^2)
+  $$
+
+- $$
+  1+2+4+8+ \dots +N \in \Theta (N)
+  $$
+
+**Practice.** The only way to learn this is through plenty of practice. 
