@@ -115,4 +115,15 @@ Big Theta is exactly equivalent to order of growth. That is, if a function $R(N)
   1+2+4+8+ \dots +N \in \Theta (N)
   $$
 
-**Practice.** The only way to learn this is through plenty of practice. 
+**Practice.** The only way to learn this is through plenty of practice.
+
+## 8.4
+
+- Big O is an upper bound ("less than or equals")
+- Big Omega is a lower bound ("greater than or equals")
+- Big Theta is both an upper and lower bound ("equals")
+- Big O does NOT mean "worst case". We can still describe worst cases using Big Theta
+- Big Omega does NOT mean "best case". We can still describe best cases using Big Theta
+- Big O is sometimes colloquially used in cases where Big Theta would provide a more precise statement
+- Amortized analysis provides a way to prove the average cost of operations.
+- If we chose $a_i$ such that $\Phi_i$ is never negative and $a_i$ is constant for all $i$, then the amortized cost is an upper bound on the true cost.
