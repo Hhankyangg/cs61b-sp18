@@ -35,3 +35,38 @@ Performing $M$ operations takes $\Theta (NM)$ time in the worst case. Again, thi
 - `isConnected` (and `find`): Requires root finding (worst case $\log N$ time).
 
 **Weighted quick union with path compression.** When `find` is called, every node along the way is made to point at the root. Results in nearly flat trees. Making $M$ calls to union and find with $N$ objects results in no more than $O (M \log ^∗ N)$ array accesses, not counting the creation of the arrays. For any reasonable values of $N$ in this universe that we inhabit, $\log ^∗ N$ is at most 5. It is possible to derive an even tighter bound, mentioned briefly in class (known as the [Ackerman function](https://en.wikipedia.org/wiki/Ackermann_function)).
+
+## Binary Search Trees
+
+### Normal Binary Search Trees (BSTs)
+
+**Binary Trees**: in addition to the above requirements, also hold the binary property constraint. That is, each node has either 0, 1, or 2 children.
+
+**Binary Search Trees**: in addition to all of the above requirements, also hold the property that For every node X in the tree:
+
+- Every key in the left subtree is less than X’s key.
+- Every key in the right subtree is greater than X’s key.
+
+#### BSTs Operations
+
+- **Search**
+- **Insert** always insert at a leaf node
+- **Delete** 
+  - *has no children*
+    delete the pointer
+  - *has 1 child*
+    reassign the parent's child pointer to the node's child and the node will eventually be garbage collected.
+  - *has 2 children*
+    take the right-most node in the left subtree or the left-most node in the right subtree. Then, replace the deleted node with either one you found and then remove the old one. (the old one must have no or 1 child)
+#### BSTs as Sets and Maps
+- We can use a BST to implement the `Set` ADT. If we use a BST, we can decrease the runtime of `contains` to $\log N$ because of the BST property which enables us to use binary search!
+- We can also make a binary tree into a map by having each BST node hold `(key,value)` pairs instead of singular values. We will compare each element's key in order to determine where to place it within our tree.
+
+### Balanced BSTs
+
+#### AVL Trees
+
+#### B-Trees
+
+#### Red-Black Trees
+
