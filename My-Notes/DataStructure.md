@@ -64,9 +64,145 @@ Performing $M$ operations takes $\Theta (NM)$ time in the worst case. Again, thi
 
 ### Balanced BSTs
 
+关于查找效率，如果一棵树的高度为 $h$，在最坏的情况，查找一个关键字需要对比 $h$ 次，查找时间复杂度（也为平均查找长度 ASL，Average Search Length）不超过 $O(h)$。一棵理想的二叉搜索树所有操作的时间可以缩短到 $O(\log n)$（$n$ 是节点总数）。
+
+然而 $O(h)$ 的时间复杂度仅为理想情况。在最坏情况下，搜索树有可能退化为链表。想象一棵每个结点只有右孩子的二叉搜索树，那么它的性质就和链表一样，所有操作（增删改查）的时间是 $O(n)$。
+
+对于二叉搜索树来说，常见的平衡性的定义是指：以 T 为根节点的树，每一个结点的左子树和右子树高度差最多为 1。
+
 #### AVL Trees
+
+AVL 树，一种平衡的二叉搜索树。
+
+- 空二叉树是一个 AVL 树
+- 如果 T 是一棵 AVL 树，那么其左右子树也是 AVL 树，并且 $|h(ls) - h(rs)| \leq 1$，$h$ 是其左右子树的高度
+- 树高为 $O(\log n)$
+
+平衡因子：右子树高度 - 左子树高度
+
+##### 旋转操作维护平衡
+ 左旋（Left Rotate 或者 zag） 和 右旋（Right Rotate 或者 zig）
+
+![bst-rotate](bst-rotate.svg)
+
+rotateLeft-G:
+![rotateLeft(G)](rotateLeft-G.png)
+
+We can also rotate on a non-root node. We just disconnect the node from the parent temporarily, rotate the subtree at the node, then reconnect the new root.
+
+```java
+// we are returning x, and other parts of our code will make use of this information to correctly update the parent node's pointer.
+private Node rotateRight(Node h) {
+    // assert (h != null) && isRed(h.left);
+    Node x = h.left;
+    h.left = x.right;
+    x.right = h;
+    return x;
+}
+
+// make a right-leaning link lean to the left
+private Node rotateLeft(Node h) {
+    // assert (h != null) && isRed(h.right);
+    Node x = h.right;
+    h.right = x.left;
+    x.left = h;
+    return x;
+}
+```
+
+四种平衡被破坏的维护方式：
+<grid>
+![ll](bst-LL.svg)
+![rr](bst-RR.svg)
+![lr](bst-LR.svg)
+![rl](bst-RL.svg)
+</grid>
+
+[AVL树可视化](https://www.cs.usfca.edu/~galles/visualization/AVLtree.html)
 
 #### B-Trees
 
+##### B树分裂操作
+
+针对一棵高度为 $h$ 的 $m$ 阶 B树，插入一个元素时，首先要验证该元素在 B树中是否存在，如果不存在，那么就要在叶子节点中插入该新的元素，此时分 3 种情况：
+1. 如果叶子节点空间足够，即该节点的关键字数小于 $m-1$，则直接插入在叶子节点的左边或右边；
+2. 如果空间满了以至于没有足够的空间去添加新的元素，即该节点的关键字数已经有了 $m$ 个，则需要将该节点进行「分裂」，将一半数量的关键字元素分裂到新的其相邻右节点中，中间关键字元素上移到父节点中，而且当节点中关键元素向右移动了，相关的指针也需要向右移。
+     - 从该节点的原有元素和新的元素中选择出中位数
+    - 小于这一中位数的元素放入左边节点，大于这一中位数的元素放入右边节点，中位数作为分隔值。
+    - 分隔值被插入到父节点中，这可能会造成父节点分裂，分裂父节点时可能又会使它的父节点分裂，以此类推。如果没有父节点（这一节点是根节点），就创建一个新的根节点（增加了树的高度）。
+
+一个三阶 B树 插入 25，26：
+![b-tree-1](b-tree-1.png)
+
+> B-Trees with a limit of 3 items per node are also called 2-3-4 trees or 2-4 trees (a node can have 2, 3, or 4 children). Setting a limit of 2 items per node results in a 2-3 tree.
+
+##### B树特征，用途
+
+**Usage of b-tree**
+B-Trees are used mostly in two specific contexts: first, with a small L(阶数) for conceptually balancing search trees, or secondly, with L in the thousands for *databases* and *file systems* with large records.
+
+**B树性质**
+- 每个节点最多有 $m$ 个子节点。
+- 每一个非叶子节点（除根节点）最少有 $\lceil \dfrac{m}{2} \rceil$ 个子节点。
+- 如果根节点不是叶子节点，那么它至少有两个子节点。
+- 有 $k$ 个子节点的非叶子节点拥有 $k−1$ 个键，且升序排列，满足 $k[i] < k[i+1]$。
+- 所有的叶子节点都在同一层（$\log n$）。
+
+[B树可视化](https://www.cs.usfca.edu/~galles/visualization/BTree.html)
+
 #### Red-Black Trees
 
+We show that a link is a glue link by making it red. Normal links are black. Because of this, we call these structures **left-leaning red-black trees (LLRB)**.
+
+![B-to-LLRB](B-to-LLRB.png)
+
+Left-Leaning Red-Black trees have a **1-1 correspondence with** 2-3 trees. Every 2-3 tree has a unique LLRB red-black tree associated with it. 
+
+##### Properties of LLRBs
+
+- 1-1 correspondence with 2-3 trees.
+- No node has 2 red links.
+- There are no red right-links.
+- Every path from root to leaf has the same - number of black links (because 2-3 trees have the same number of links to every leaf).
+- Height is no more than `2 * height + 1` of the corresponding 2-3 tree. 
+- The height of a red-black tree is proportional to the log of the number of entries.
+
+##### Insertion of LLRBs
+
+When inserting: Use a red link. Insert in the same way as inserting into a BST.
+- If there is a right-leaning “3-node”, we have a Left Leaning Violation.
+  - Rotate left the appropriate node to fix.
+    ![LLRB-insert1](LLRB-insert1.png)
+- If there are two consecutive left links, we have an Incorrect 4 Node Violation.
+  - Rotate right the appropriate node to fix.
+    ![LLRB-insert2](LLRB-insert2.png)
+- If there are any nodes with two red children, we have a Temporary 4 Node.
+  - Color flip the node to emulate the split operation.
+    ![LLRB-insert3](LLRB-insert3.png)
+
+在实现时，可将红色边作为红色结点 -> 插入元素时，默认先插入红色节点
+
+```java
+private Node put(Node h, Key key, Value val) {
+    if (h == null) { return new Node(key, val, RED); }
+
+    int cmp = key.compareTo(h.key);
+    if (cmp < 0)      { h.left  = put(h.left,  key, val); }
+    else if (cmp > 0) { h.right = put(h.right, key, val); }
+    else              { h.val   = val;                    }
+
+    if (isRed(h.right) && !isRed(h.left))      { h = rotateLeft(h);  }
+    if (isRed(h.left)  &&  isRed(h.left.left)) { h = rotateRight(h); }
+    if (isRed(h.left)  &&  isRed(h.right))     { flipColors(h);      } 
+
+    return h;
+}
+```
+
+- Binary search trees are simple, but they are subject to imbalance which leads to crappy runtime. 2-3 Trees (B Trees) are balanced, but painful to implement.
+- LLRB insertion is simple to implement (deletion is a bit harder to implement).
+  - Use three basic operations to maintain the balanced structure, namely `rotateLeft`, `rotateRight`, and `colorFlip`.
+- LLRBs maintain correspondence with 2-3 trees, Standard Red-Black trees maintain correspondence with 2-3-4 trees.
+  - Java’s `TreeMap` is a red-black tree that corresponds to 2-3-4 trees.
+  - 2-3-4 trees allow glue links on either side.
+  - More complex implementation, but faster.
