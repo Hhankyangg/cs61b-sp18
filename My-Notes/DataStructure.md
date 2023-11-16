@@ -206,3 +206,33 @@ private Node put(Node h, Key key, Value val) {
   - Java’s `TreeMap` is a red-black tree that corresponds to 2-3-4 trees.
   - 2-3-4 trees allow glue links on either side.
   - More complex implementation, but faster.
+
+## Hashing
+
+**Brute force approach.** All data is just a sequence of bits. Can treat key as a gigantic number and use it as an array index. Requires exponentially large amounts of memory.
+
+**Hashing.** Instead of using the entire key, represent entire key by a smaller value. In Java, we hash objects with a `hashCode()` method that returns an integer (32 bit) representation of the object.
+
+**hashCode() to index conversion.** To use `hashCode()` results as an index, we must convert the `hashCode()` to a valid index. Modulus does not work since hashCode may be negative. Taking the absolute value then the modulus also doesn’t work since `Math.abs(Integer.MIN_VALUE)` is negative. Typical approach: use `hashCode & 0x7FFFFFFF` or `Math.floorMod(key.hashCode(), array.length)` instead before taking the modulus.
+
+**Hash function.** Converts a key to a value between 0 and M-1. In Java, this means calling hashCode(), setting the sign bit to 0, then taking the modulus.
+
+**Designing good hash functions.** Requires a blending of sophisticated mathematics and clever engineering; beyond the scope of this course. Most important guideline is to use all the bits in the key. If `hashCode()` is known and easy to invert, adversary can design a sequence of inputs that result in everything being placed in one bin. Or if `hashCode()` is just plain bad, same thing can happen.
+
+**Collision resolution.** Two philosophies for resolving collisions discussed in class: Separate (a.k.a. external) chaining and ‘open addressing’.
+
+**Separate-chaining hash table.** Key-value pairs are stored in a linked list of nodes of length M. Hash function tells us which of these linked lists to use. Get and insert both require potentially scanning through entire list.
+
+**Resizing separate chaining hash tables.** Understand how resizing may lead to objects moving from one linked list to another. Primary goal is so that M is always proportional to N, 
+$$
+\rm load \ factor = \frac {size()} {array.length}
+$$
+i.e. maintaining a load factor bounded above by some constant.
+
+**Performance of separate-chaining hash tables.** Cost of a given `get`, `insert`, or `delete` is given by number of entries in the linked list that must be examined.
+- The expected amortized search and insert time (assuming items are distributed evenly) is N / M, which is no larger than some constant (due to resizing).
+
+**Open-addressing hash tables.** 
+- 线性探测
+- 平方探测
+- 多次哈希
