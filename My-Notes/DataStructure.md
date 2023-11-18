@@ -236,3 +236,81 @@ i.e. maintaining a load factor bounded above by some constant.
 - 线性探测
 - 平方探测
 - 多次哈希
+
+## Heaps & Priority Queues
+
+堆是一棵树，其每个节点都有一个键值，且每个节点的键值都大于等于/小于等于其父亲的键值。
+
+### 二叉堆
+
+We will define our binary min/max-heap as being complete and obeying min/max-heap property:
+- **Min-heap**: Every node is less/greater than or equal to both of its children
+- **Complete**: Missing items only at the bottom level (if any), all nodes are as far left as possible.
+
+### Tree Representation
+
+- Approach 1 (explicit link)
+  - ![tree-approach-1-a](tree-approach-1-a.png)
+    -  These are hardwired links that give us fixed-width nodes. 
+  - ![tree-approach-1-b](tree-approach-1-b.png)
+    - This would give us variable-width nodes, but also awkward traversals and performance will be worse.
+  - ![tree-approach-1-c](tree-approach-1-c.png)
+- Approach 2 (2 arrays)
+  ``` java
+  public class Tree2<Key> {
+    Key[] keys;
+    int[] parents;
+    ...
+  }
+  ```
+  - ![tree-approach-2](tree-approach-2.png)
+- Approach 3 (only 1 array)
+  ```java
+  public class TreeC<Key> {
+    Key[] keys;
+    ...
+  }
+  ```
+  - ![tree-approach-3](tree-approach-3.png)
+  - **Can only be used for complete tree!!**
+  - the first item in array can be skipped and we can start the root in index 1, which make the calculation much more simply.
+    - `leftChild(k) = keys[k * 2];`
+    - `rightChild(k) = keys[k * 2 + 1];`
+    - `parent(k) = keys[k / 2];`
+
+### Priority Queues
+
+```java
+/** (Min) Priority Queue: Allowing tracking and removal of 
+  * the smallest item in a priority queue. */
+public interface MinPQ<Item> {
+    /** Adds the item to the priority queue. */
+    public void add(Item x);
+    /** Returns the smallest item in the priority queue. */
+    public Item getSmallest();
+    /** Removes the smallest item from the priority queue. */
+    public Item removeSmallest();
+    /** Returns the size of the priority queue. */
+    public int size();
+}
+```
+
+- `add`: Add to the end of heap temporarily. Swim up the hierarchy to the proper place.
+  - Swimming involves swapping nodes if child < parent
+- `getSmallest`: Return the root of the heap (This is guaranteed to be the minimum by our min-heap property)
+- `removeSmallest`: Swap the last item in the heap into the root. Sink down the hierarchy to the proper place.
+  - Sinking involves swapping nodes if parent > child. Swap with the smallest child to preserve min-heap property.
+
+|Methods|Ordered Array|Bushy BST|Hash Table|Heap|
+|:-|:-|:-|:-|:-|
+|`add`|$\Theta (N)$|$\Theta (\log (N))$|$\Theta (1)$|$\Theta (\log (N))$|
+|`getSmallest`|$\Theta (1)$|$\Theta (\log (N))$|$\Theta (N)$|$\Theta (1)$|
+|`removeSmallest`|$\Theta (N)$|$\Theta (\log (N))$|$\Theta (N)$|$\Theta (\log (N))$|
+
+- Heap operations are amortized analysis, since the array will have to resize (not a big deal)
+- BST's can have constant time getSmallest if pointer is stored to smallest element
+- Array-based heaps take around 1/3rd the memory it takes to represent a heap using approach 1A (direct pointers to children)
+
+
+## Sort
+
