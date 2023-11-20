@@ -303,14 +303,93 @@ public interface MinPQ<Item> {
 
 |Methods|Ordered Array|Bushy BST|Hash Table|Heap|
 |:-|:-|:-|:-|:-|
-|`add`|$\Theta (N)$|$\Theta (\log (N))$|$\Theta (1)$|$\Theta (\log (N))$|
-|`getSmallest`|$\Theta (1)$|$\Theta (\log (N))$|$\Theta (N)$|$\Theta (1)$|
-|`removeSmallest`|$\Theta (N)$|$\Theta (\log (N))$|$\Theta (N)$|$\Theta (\log (N))$|
+|`add`|$\Theta (N)$|$\Theta (\log N)$|$\Theta (1)$|$\Theta (\log N)$|
+|`getSmallest`|$\Theta (1)$|$\Theta (\log N)$|$\Theta (N)$|$\Theta (1)$|
+|`removeSmallest`|$\Theta (N)$|$\Theta (\log N)$|$\Theta (N)$|$\Theta (\log N)$|
 
 - Heap operations are amortized analysis, since the array will have to resize (not a big deal)
 - BST's can have constant time getSmallest if pointer is stored to smallest element
 - Array-based heaps take around 1/3rd the memory it takes to represent a heap using approach 1A (direct pointers to children)
 
 
-## Sort
+## Sorting
 
+|Methods|Best Case Runtime|Worst Case Runtime|Space|Demo|
+|:-|:-|:-|:-|:-|
+|Selection Sort|$\Theta (N^2)$|$\Theta (N^2)$|$\Theta (1)$|[Link](http://goo.gl/8Fbda5)|
+|Heap Sort (in place)|$\Theta (N)$|$O (N\log N)$|$\Theta (1)$|[Link](https://docs.google.com/presentation/d/1z1lCiLSVLKoyUOIFspy1vxyEbe329ntLAVDQP3xjmnU/pub?start=false&loop=false&delayms=3000)|
+|Merge Sort|$\Theta (N\log N)$|$\Theta (N\log N)$|$\Theta (N)$|[Link](https://docs.google.com/presentation/d/1h-gS13kKWSKd_5gt2FPXLYigFY4jf5rBkNFl3qZzRRw/pub?start=false&loop=false&delayms=3000)|
+|Insertion Sort (in place)|$\Theta (N)$|$\Theta (N^2)$|$\Theta (1)$|[Link](https://docs.google.com/presentation/d/10b9aRqpGJu8pUk8OpfqUIEEm8ou-zmmC7b_BE5wgNg0/pub?start=false&loop=false&delayms=3000)|
+|Shell's Sort|$\Theta (N)$|$\Omega (N\log N) \newline O(?)$|$\Theta (1)$|N/A|
+
+
+**Inversions.** The number of pairs of elements in a sequence that are out of order. An array with no inversions is ordered.
+
+### Selection Sort
+
+One way to sort is by selection: Repeatedly identifying the most extreme element and moving it to the end of the unsorted section of the array. The naive implementation of such an algorithm is in place.
+
+### Heap Sort
+
+> A variant of selection sort
+
+#### Naive Version
+
+Insert all items into a MaxPQ and then remove them one by one. The first such item removed is placed at the end of the array, the next item right before the end, and so forth until that last item deleted is placed in position 0 of the array.
+
+**Analysis**
+- Each insertion and deletion takes $O(\log N)$ time, and there are $N$ insertions and deletions, resulting in a $O(N \log N)$ runtime. 
+- Every remove from MaxPQ needs $\Theta(1)$ time, resulting in a $\Theta(N)$ runtime
+
+Overall runtime = $O(N\log N)$
+
+> If all elements are equal, Overall runtime = $\Theta (N)$
+
+This naive version of heap sort uses $\Theta (N)$ for the PQ. Creation of the MaxPQ requires $\Theta (N)$ memory. 
+
+It is also possible to use a MinPQ instead.
+
+#### In-place Version
+
+When sorting an array, we can avoid the $\Theta (N)$ memory cost by treating the array itself as a heap. 
+To do this, we first heapify the array using **bottom-up heap construction** (倒序开始，每个都元素都尽量下沉 -> 从下到上构建二叉堆，为了方便计算使用大项堆) (taking $\Theta(N)$ time). We then repeatedly delete the max item, swapping it with the last item in the heap. Over time, the heap shrinks from N items to 0 items, and the sorted list from 0 items to N items. The resulting version is also $\Theta(N \log N)$.
+
+### Merge Sort
+
+Mergesort is $\Theta(N \log N)$ (分 $\log N$ 层，每层合并都要遍历 $N$ 个元素) and uses $\Theta(N)$ memory.
+
+## Insertion Sort
+
+For each item, insert into the output sequence in the appropriate place. Naive solution involves creation of a separate data structure. 
+
+The memory efficient version of this algorithm swaps items one-by-one towards the left until they land in the right place, without creation of extra array. Every item to the left of position i is in sorted order, and everything to the right has not yet been examined. **Every swap fixes exactly one inversion.**
+
+**Analysis**
+
+- In the best case, insertion sort takes $\Theta(N)$ time. 
+- In the worst case, $\Theta(N^2)$ --in a reverse-sorted array, we have to swap every item all the way to the front. 
+
+**Advantage of Insertion Sort**
+
+- On sorted or almost-sorted arrays, insertion sort does very little work. In fact, the number of swaps that it does is equal to the number of inversions in the array.
+  - On arrays with a small number of inversions, insertion sort is probably the fastest sorting algorithm. The runtime is $\Theta (N + K)$, where $K$ is the number of inversions in the array. If we define an almost-sorted array as one where the number of inversions $K < cN$ for some constant $c$, then insertion sort runs in linear time.
+- Insertion sort is extremely fast on small arrays, usually of size 15 or less. In fact, the Java implementation of mergeSort uses insertion sort when the split becomes less than 15 items. 
+
+## Shell's Sort
+
+> 是插入排序的一种改进版本，但是是不稳定排序。
+
+**Big idea: Fix multiple inversions at once.**
+
+Idea is to compare items that are a distance h apart from each other, starting from large h and reducing down to h=1. The last step where h=1 ensures that the array is sorted (since h=1 is just insertion sort). The earlier steps help speed things up by making long distance moves, fixing many inversions at once.
+
+时间复杂度：希尔排序的时间复杂度比较难证明，希尔增量的最坏时间复杂度还是 $O(N^2)$。
+
+一些经过优化的增量序列如
+
+- Hibbard序列 $h(gap) = 2^k - 1$ 
+- Knuth序列 $h_1 = 1, h_{i + 1} = 3h_i + 1$
+
+经过复杂证明可使得最坏时间复杂度为 $O(N^{1.5})$。
+
+![shellSort](shellSort.png)
