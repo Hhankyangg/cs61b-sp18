@@ -321,6 +321,25 @@ public interface MinPQ<Item> {
 |Merge Sort|$\Theta (N\log N)$|$\Theta (N\log N)$|$\Theta (N)$|[Link](https://docs.google.com/presentation/d/1h-gS13kKWSKd_5gt2FPXLYigFY4jf5rBkNFl3qZzRRw/pub?start=false&loop=false&delayms=3000)|
 |Insertion Sort (in place)|$\Theta (N)$|$\Theta (N^2)$|$\Theta (1)$|[Link](https://docs.google.com/presentation/d/10b9aRqpGJu8pUk8OpfqUIEEm8ou-zmmC7b_BE5wgNg0/pub?start=false&loop=false&delayms=3000)|
 |Shell's Sort|$\Theta (N)$|$\Omega (N\log N) \newline O(?)$|$\Theta (1)$|N/A|
+|Quick Sort|$\Theta(N \log N)$|$\Theta(N^2)$|$\Theta (1)$|[Link](https://docs.google.com/presentation/d/1QjAs-zx1i0_XWlLqsKtexb-iueao9jNLkN-gW9QxAD0/edit?usp=sharing)|
+
+排序算法的评价维度主要有四类：**稳定性，就地性，自适应性**
+
+**稳定性**
+排序算法的稳定性其实就是只在排序之后，相同值元素在数据文件中的相对位置是否发生变化
+- 稳定排序：在完成排序后，不改变 相等元素在数组中的相对顺序
+- 非稳定排序：在完成排序后，相等元素在数组中的相对位置 可能被改变
+
+**就地性**
+就地性其实就是看排序算法是否需要借助额外的空间进行排序
+- 原地排序：不需要使用额外的辅助空间
+- 非原地排序：需要使用额外的辅助空间
+
+**自适应性**
+自适应性其实就是排序算法的时间复杂度受输入数据影响
+- 自适应排序：时间复杂度受输入数据影响，即最佳 / 最差 / 平均时间复杂度不相等。
+- 非自适应排序：时间复杂度恒定，与输入数据无关。
+
 
 
 **Inversions.** The number of pairs of elements in a sequence that are out of order. An array with no inversions is ordered.
@@ -358,7 +377,7 @@ To do this, we first heapify the array using **bottom-up heap construction** (�
 
 Mergesort is $\Theta(N \log N)$ (分 $\log N$ 层，每层合并都要遍历 $N$ 个元素) and uses $\Theta(N)$ memory.
 
-## Insertion Sort
+### Insertion Sort
 
 For each item, insert into the output sequence in the appropriate place. Naive solution involves creation of a separate data structure. 
 
@@ -375,7 +394,7 @@ The memory efficient version of this algorithm swaps items one-by-one towards th
   - On arrays with a small number of inversions, insertion sort is probably the fastest sorting algorithm. The runtime is $\Theta (N + K)$, where $K$ is the number of inversions in the array. If we define an almost-sorted array as one where the number of inversions $K < cN$ for some constant $c$, then insertion sort runs in linear time.
 - Insertion sort is extremely fast on small arrays, usually of size 15 or less. In fact, the Java implementation of mergeSort uses insertion sort when the split becomes less than 15 items. 
 
-## Shell's Sort
+### Shell's Sort
 
 > 是插入排序的一种改进版本，但是是不稳定排序。
 
@@ -393,3 +412,41 @@ Idea is to compare items that are a distance h apart from each other, starting f
 经过复杂证明可使得最坏时间复杂度为 $O(N^{1.5})$。
 
 ![shellSort](shellSort.png)
+
+### Quick Sort
+
+**Partitioning.** Partitioning an array on a pivot means to rearrange the array such that all items to the left of the pivot are ≤ the pivot, and all items to the right are ≥ the pivot.
+
+**Quicksort.** Partition on some pivot. Quicksort to the left of the pivot. Quicksort to the right.
+
+**Quicksort Runtime.** Understand how to show that in the best case, Quicksort has runtime $\Theta(N\log N)$, and in the worse case has runtime $\Theta(N^2)$.
+
+**Quicksort properties.** For most real world situations, quicksort is the fastest sort.
+
+#### 快排优化
+
+**Pivot Selection.** 
+
+- Use leftmost item
+- Pick the middle item of the left-most, right-most and middle-index elements
+- Pick a random pivot
+
+**Partitioning Method.**
+
+- Scan the whole array 3 times
+- Hoare Partitioning:
+  - [Demo](https://docs.google.com/presentation/d/1DOnWS59PJOa-LaBfttPRseIpwLGefZkn450TMSSUiQY/pub?start=false&loop=false&delayms=3000)
+  - Left pointer loves small items.
+    Right pointer loves large items.
+    Big idea: Walk towards each other, swapping anything they don’t like.
+      - End result is that things on left are “small” and things on the right are “large”.
+- 3-way quicksort
+  - 与原始的快速排序不同，三路快速排序在随机选取分界点 m 后，将待排数列划分为三个部分：小于 m、等于 m 以及大于 m。这样做即实现了将与分界元素相等的元素聚集在分界元素周围这一效果。
+
+**Shuffle before sorting**
+
+**当序列较短（短于 15 ）时，使用 插入排序 效率更高**
+
+#### Quick Select
+
+Using partitioning, we can solve the selection problem in expected linear time. The algorithm is to simply partition the array, and then quick select on the side of the array containing the median. Best case time is $\Theta (N)$, expected time is $\Theta (N)$, and worst case time is $\Theta (N^2)$. You should know how to show the best and worst case times. This algorithm is the fastest known algorithm for finding the median.
