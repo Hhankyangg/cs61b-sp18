@@ -86,7 +86,15 @@ public class TestBSTMap {
         assertTrue(b.get("hi") != null);
     }
 
-    public static void main(String[] args) {
-        jh61b.junit.TestRunner.runTests(TestBSTMap.class);
+    @Test
+    public void keySetTest() {
+        BSTMap<Integer, Integer> b = new BSTMap<Integer, Integer>();
+        b.put(1, 1);
+        b.put(2, 2);
+        b.put(5, 5);
+        b.put(4, 4);
+        b.put(6, 6);
+        b.put(10, 10);
+        System.out.println(b.keySet());
     }
 }

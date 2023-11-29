@@ -127,7 +127,24 @@ public class TestMyHashMap {
         assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
     }
 
-    public static void main(String[] args) {
-        jh61b.junit.TestRunner.runTests(TestMyHashMap.class);
+    @Test
+    public void resizeTest() {
+        MyHashMap<Integer, Integer> dictionary = new MyHashMap<>();
+        dictionary.put(1, 1);
+        dictionary.put(2, 1);
+        dictionary.put(3, 1);
+        dictionary.put(4, 1);
+        dictionary.put(5, 1);
+        dictionary.put(6, 1);
+        dictionary.put(7, 1);
+        dictionary.put(8, 1);
+        dictionary.put(9, 1);
+        dictionary.put(10, 1);
+        dictionary.put(11, 1);
+        dictionary.put(12, 1);
+        assertEquals(16, dictionary.buckets.length);
+        dictionary.put(13, 1);
+        assertEquals(32, dictionary.buckets.length);
+        assertTrue(dictionary.containsKey(13));
     }
 }
