@@ -64,8 +64,8 @@ public class TestComplexOomage {
         List<Oomage> deadlyList = new ArrayList<>();
 
         for (int i = 0; i < 1000; i += 1) {
-            List<Integer> params = new ArrayList<>(8);
-            for (int j = 0; j < params.size(); j += 1) {
+            List<Integer> params = new LinkedList<>();
+            for (int j = 0; j < 8; j += 1) {
                 if (j < 4) {
                     params.add(StdRandom.uniform(0, 256));
                 } else {
