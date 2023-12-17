@@ -460,3 +460,91 @@ Using partitioning, we can solve the selection problem in expected linear time. 
 **Level Order Traversal.** A level-order traversal visits every item at level 0, then level 1, then level 2, and so forth. One typical implementation for a level order traversal is an iterative-deepening strategy.
 
 ## Graphs
+
+### Graphs Traversals
+
+**Graph Traversals Overview.** Just as we had both depth-first (preorder, inorder, and postorder) traversals and a breath-first (level order) traversal for trees, we can generalize these concepts to graphs. Specifically, given a source vertex, we can “visit” vertices in:
+
+- DFS Preorder: order in which DFS is called on each vertex.
+- DFS Postorder: order in which we return from DFS calls.
+- BFS: order of distance from the source. The lecture calls this “level order” before we banish that term since nobody uses it in the real world for general graphs.
+We use the term “depth first”, because we will explore “deeply” first, and use the term “breadth first” because we go wide before we go deep.
+
+If we use BFS on a vertex of a graph that happens to be the root of a tree, we get exactly the same thing as level order traversal.
+
+#### DFS
+
+**recursive DFS implements**
+
+```shell
+mark vertex
+visit vertex
+for each neighbor of vertex:
+    if neighbor not marked:
+        dfs(neighbor)
+```
+
+**iterative DFS implements**
+ 
+For DFS we mark nodes only once we visit a node - aka pop it from the fringe. As a result, it's possible to have multiple instances of the same node on the stack at a time if that node has been queued but not visited yet. With BFS we mark nodes as soon as we add them to the fringe so this is not possible.
+
+``` shell
+Initialize the fringe, an empty stack
+    push the starting vertex on the fringe
+    while fringe is not empty:
+        pop a vertex off the fringe
+        if vertex is not marked:
+            mark the vertex
+            visit vertex
+            for each neighbor of vertex:
+                if neighbor not marked:
+                    push neighbor to fringe
+```
+
+#### BFS
+
+In BFS, we visit all of our immediate children before continuing on to any of our grandchildren. In other words, we visit all nodes 1 edges from our source. Then, all nodes 2 edges from our source, etc.
+The pseudocode for BFS is as follows:
+
+```shell
+Initialize the fringe, an empty queue 
+    add the starting vertex to the fringe
+    mark the starting vertex
+    while fringe is not empty:
+        remove vertex v from the fringe
+        for each neighbor n of vertex v:
+            if n is not marked:
+                add n to fringe
+                mark n
+                set edgeTo[n] = v
+                set distTo[n] = distTo[v] + 1
+```
+
+A fringe is just a term we use for the data structure we are using to store the nodes on the frontier of our traversal's discovery process (the next nodes it is waiting to look at). For BFS, we use a queue for our fringe.
+
+`edgeTo[...]` is a map that helps us track how we got to node `n`; we got to it by following the edge from `v` to to `n`.
+
+`distTo[...]` is a map that helps us track how far `n` is from the starting vertex. Assuming that each edge is worth a distance of `1`, then the distance to `n` is just one more than the distance to get to `v`. Why? We can use the way we know how to get to `v`, then pay one more to arrive at `n` via the edge that necessarily exists between `v` and `n` (it must exist since in the for loop header, `n` is defined as a neighbor of `v`).
+
+### Graphs implementation
+
+- The choice of API for a graph determines how clients must write their code. Certain APIs make some tasks easier and other tasks harder. The choice of API can also affect runtime and memory.
+
+- Choice of graph implementations
+  - adjacency matrices
+    - An adjacency matrix is a 2D boolean array indicating whether any pair of vertices are adjacent. 
+  - lists of edges
+    - A list of edges is a collection of all edges in the graph. 
+  - adjacency lists. 
+    - The most common approach to graph representation is an adjacency list. In this representation, we maintain a array of lists indexed by vertex number; each index stores all vertices connected to the given vertex.
+
+### Topological Sorting
+
+https://oi-wiki.org/graph/topo/#dfs-%E7%AE%97%E6%B3%95
+https://www.cnblogs.com/crab-in-the-northeast/p/topological-sort.html
+
+**DFS 算法**
+
+The algorithm is simple: Record the DFS postorder from every vertex with in-degree zero (i.e. has no incoming edges). The order you’re after is the reverse of the DFS postorder.
+
+### 
