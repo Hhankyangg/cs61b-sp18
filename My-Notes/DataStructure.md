@@ -450,3 +450,13 @@ Idea is to compare items that are a distance h apart from each other, starting f
 #### Quick Select
 
 Using partitioning, we can solve the selection problem in expected linear time. The algorithm is to simply partition the array, and then quick select on the side of the array containing the median. Best case time is $\Theta (N)$, expected time is $\Theta (N)$, and worst case time is $\Theta (N^2)$. You should know how to show the best and worst case times. This algorithm is the fastest known algorithm for finding the median.
+
+## Trees Traversals
+
+**Traversals.** When we iterate over a tree, we call this a “tree traversal”.
+
+**Depth First Traversals.** We have three depth first traversals: Pre-order, in-order and post-order. In a pre-order traversal, we visit a node, then traverse its children. In an in-order traversal, we traverse the left child, visit a node, then traverse the right child. In a post-order traversal, we traverse both children before visiting. These are very natural to implement recursively. Pre-order and post-order generalize naturally to trees with arbtirary numbers of children. In-order only makes sense for binary trees.
+
+**Level Order Traversal.** A level-order traversal visits every item at level 0, then level 1, then level 2, and so forth. One typical implementation for a level order traversal is an iterative-deepening strategy.
+
+## Graphs
