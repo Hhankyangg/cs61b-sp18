@@ -451,6 +451,29 @@ Idea is to compare items that are a distance h apart from each other, starting f
 
 Using partitioning, we can solve the selection problem in expected linear time. The algorithm is to simply partition the array, and then quick select on the side of the array containing the median. Best case time is $\Theta (N)$, expected time is $\Theta (N)$, and worst case time is $\Theta (N^2)$. You should know how to show the best and worst case times. This algorithm is the fastest known algorithm for finding the median.
 
+### 基于比较的排序算法的极限
+
+**前置知识：** $\log(N!) \in \Theta(N \log N)$
+
+**Seeking a Sorting Lower Bound.** We’ve found a number of sorts that complete execution in $\Theta(N \log N)$ time. This raises the obvious question: Could we do better? Let TUCS (which stands for “The Ultimate Comparison Sort”) be the best possible algorithm that compares items and puts them in order. We know that TUCS’s worst case runtime is $O(N \log N)$ because we already know several algorithm whose worst case runtime is $\Theta(N \log N)$, and TUCS’s worst case runtime is $\Omega(N)$ because we have to at least look at every item. Without further discussion, this analysis so far suggest that might be able to do better than $\Theta(N \log N)$ worst case time.
+
+**Establishing a Sorting Lower Bound.** As a fanciful exercise, we played a game called puppy-cat-dog, in which we have to identify which of three boxes contains a puppy, cat, or dog. 
+Since there are $3! = 6$ permutations, we need at least $ceil(\lg(6)) = 3$ questions to resolve the answer. In other words, if playing a game of 20 questions with 6 possible answers, we have to ask at least 3 questions to be sure we have the right answer. Since sorting through comparisons is one way to solve puppy-cat-dog, then any lower bound on the number of comparisons for puppy-cat-dog also applies to sorting. Given  items, there are $N!$ permutations, meaning we need $\lg(N!)$ questions to win the game of puppy-cat-dog, and by extension, we need at least $\lg(N!)$ to sort $N$ items with yes/no questions. 
+Since $\log(N!) \in \Theta(N \log N)$, we can say that the hypothetical best sorting algorithm that uses yes/no questions requires $\log(N!)$ yes/no questions. Thus, there is no comparison based algorithm that has a worst case that is a better order of growth than $\Theta(N \log N)$ compares.
+
+### Radix Sorts
+
+**Counting Sort.** Allows you to sort $N$ keys that are integers between $0$ and $R-1$ in $\Theta(N+R)$ time. Beats linear lower bound by avoiding any binary compares. This is a completely different philosophy for how things should be sorted. This is the most important concept for this lecture.
+
+**LSD.(Least Significant Digit Radix Sort )** R
+In the LSD algorithm, we sort by each digit, working from right to left. Requires examination of $\Theta(WN)$ digits, where $W$ is the length of the longest key. 
+Runtime is $\Theta(WN + WR)$, though we usually think of $R$ as a constant and just say $\Theta(WN)$ . The $\Theta(WR)$ part of the runtime is due to the creation for length $R$ arrows for counting sort. We usually do LSD sort using counting sort as a subroutine, but it’s worth thinking about whether other sorts might work as well.(QUEUE)
+
+**LSD vs Comparison Sorting.** Our comparison sorts, despite requiring $\Theta(N \log N)$ time, can still be faster than LSD sort. For extremely large N, LSD sort will naturally win, but log N is typically pretty small. Know which algorithm is best in the two extreme cases of very long dissimilar strings and very long, nearly equal strings.
+
+**MSD.** In MSD sorting, we work from left to right, and solve each resulting subproblem **independently**. 
+Thus, for each problem, we may have as many as $R$ subproblem. Worst case runtime is exactly the same as LSD sort, $\Theta(WN + WR)$, though can be much better. In the very best case, where we only have to look at the top character (only possible for $R>N$), we have a runtime of $\Theta(N + R)$.
+
 ## Trees Traversals
 
 **Traversals.** When we iterate over a tree, we call this a “tree traversal”.
