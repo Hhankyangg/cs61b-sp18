@@ -570,4 +570,48 @@ https://www.cnblogs.com/crab-in-the-northeast/p/topological-sort.html
 
 The algorithm is simple: Record the DFS postorder from every vertex with in-degree zero (i.e. has no incoming edges). The order you’re after is the reverse of the DFS postorder.
 
-### 
+### Dijkstra's Algorithm
+
+Suppose we want to record the shortest paths from some source to every single other vertex (so that we can rapidly found a route from s to X, from s to Y, and so forth). We already know how to do this if we’re only counting the number of edges, we just use BFS.
+But if edges have weights (representing, for example road lengths), we have to do something else. It turns out that even considering edge weights, we can preprocess the shortest route from the source to every vertex very efficiently. We store the answer as a “shortest paths tree”. Typically, a shortest paths tree is stored as an array of edgeTo[] values (and optionally distTo[] values if we want a constant time distTo() operation).
+To find the SPT, we can use Dijkstra’s algorithm, which is quite simple once you understand it. Essentially, we visit each vertex in order of its distance from the source, where each visit consists of relaxing every edge. Informally, relaxing an edge means using it if its better than the best known distance to the target vertex, otherwise ignoring it. Or in pseudocode:
+
+```shell
+Dijkstra(G, s):
+    while not every vertex has been visited:
+        visit(unmarked vertex v for which distTo(v) is minimized)
+```
+
+Where visit is given by the following pseudocode:
+
+```shell
+visit(v):
+    mark(v)
+    for each edge e of v:
+        relax(e)
+```
+
+And finally, relax is given by:
+
+```shell
+relax(e):
+    v = e.source
+    w = e.target        
+    currentBestKnownWeight = distTo(w)
+    possiblyBetterWeight = distTo(v) + e.weight
+    if possiblyBetterWeight < currentBestKnownWeight
+        Use e instead of whatever we were using before
+```
+
+Runtime is $V \log V + V \log V + E \log V$, and since  for any graph we’d run Dijkstra’s algorithm on, this can be written as more simply O(E log V).
+
+### Minimum Spanning Trees
+
+**MST**: the lightest set of edges in a graph possible such that all the vertices are connected and acyclic. 
+**The Cut Property**: given any cut, the minimum weight crossing edge is in the MST.
+Cut:  an assignment of a graph’s nodes to two non-empty sets 
+**Crossing Edge**: an edge which connects a node from one set to a node from the other set.
+We also learned about how to find MSTs of a graph with two algorithms: 
+- **Prim's Algorithm**: Construct MST through a mechanism similar to Dijkstra's Algorithm, with the only difference of inserting vertices into the fringe not based on distance to goal vertex but distance to the MST under construction. 
+- **Kruskal's Algorithm**: Construct MST by first sorting edges from lightest to heaviest, then add edges sequentially if no cycles are formed until there are V - 1 edges.
+
